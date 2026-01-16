@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const mockHotels = [
   {
@@ -181,8 +182,8 @@ export default function HotelsPage() {
         <span className="text-xl font-semibold text-purple-900">Pawtopia</span>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
-        {/* Left Filters Panel - wider for full placeholder visibility */}
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
+        {/* Left Filters Panel */}
         <aside className="lg:w-96 xl:w-[400px] bg-white rounded-xl shadow-lg p-6 space-y-6">
           <input
             type="text"
@@ -197,7 +198,7 @@ export default function HotelsPage() {
             value={filters.city}
             onChange={(e) => setFilters({ ...filters, city: e.target.value })}
           >
-            <option value="">All cities</option>
+            <option value="">Filter for city</option>
             <option value="Ho Chi Minh City">Ho Chi Minh City</option>
             <option value="Hanoi">Hanoi</option>
             <option value="Da Nang">Da Nang</option>
@@ -208,7 +209,7 @@ export default function HotelsPage() {
             value={filters.minRating}
             onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) || 0 })}
           >
-            <option value={0}>All ratings</option>
+            <option value={0}>Filter for ratings</option>
             <option value={4.5}>4.5+</option>
             <option value={4}>4+</option>
             <option value={3.5}>3.5+</option>
@@ -235,14 +236,12 @@ export default function HotelsPage() {
           <div className="grid grid-cols-2 gap-4">
             <input
               type="date"
-              placeholder="Start date (Pick a date in the calendar)"
               className="w-full p-3 border border-gray-300 rounded-lg bg-red-50"
               value={filters.startDate}
               onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
             />
             <input
               type="date"
-              placeholder="End date (Pick a date in the calendar)"
               className="w-full p-3 border border-gray-300 rounded-lg bg-red-50"
               value={filters.endDate}
               onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
@@ -278,57 +277,63 @@ export default function HotelsPage() {
             </div>
           ) : (
             filteredHotels.map((hotel) => (
-              <div
+              <Link
                 key={hotel.id}
-                className="flex flex-col md:flex-row bg-blue-100 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+                href={`/hotels/${hotel.id}`}
+                className="block group no-underline"  // ← added no-underline to remove default link underline
               >
-                {/* Photo */}
-                <div className="md:w-1/3 bg-yellow-100 relative min-h-[260px] md:min-h-full">
-                  <Image
-                    src={hotel.photo}
-                    alt={hotel.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 p-6 flex flex-col justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-blue-900 mb-2">{hotel.name}</h2>
-                    <p className="text-gray-700 mb-4">{hotel.location}</p>
-
-                    <div className="bg-gray-100 p-4 rounded-lg mb-5">
-                      <p className="text-gray-700">{hotel.description}</p>
-                    </div>
+                <div className="flex flex-col md:flex-row bg-blue-100 rounded-xl overflow-hidden shadow-md">
+                  {/* Photo */}
+                  <div className="md:w-1/3 bg-yellow-100 relative min-h-[260px] md:min-h-full">
+                    <Image
+                      src={hotel.photo}
+                      alt={hotel.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   </div>
 
-                  <div className="flex flex-wrap items-end justify-between gap-4">
-                    <div className="flex flex-wrap gap-3">
-                      <span className="bg-orange-200 px-3 py-1 rounded text-sm">
-                        Map Ratings: {hotel.googleRating}
-                      </span>
-                      <span className="bg-orange-200 px-3 py-1 rounded text-sm">
-                        Pawtopia Ratings: {hotel.pawtopiaRating}
-                      </span>
-                      <span
-                        className={`px-3 py-1 rounded text-sm font-medium ${hotel.availability ? 'bg-green-300' : 'bg-red-300'
-                          }`}
-                      >
-                        {hotel.availability ? 'Available' : 'Not Available'}
-                      </span>
+                  {/* Content */}
+                  <div className="flex-1 p-6 flex flex-col justify-between">
+                    <div>
+                      {/* Only this text gets underlined on hover */}
+                      <h2 className="text-2xl font-bold text-blue-900 mb-2 group-hover:underline decoration-2 underline-offset-2">
+                        {hotel.name}
+                      </h2>
+                      <p className="text-gray-700 mb-4">{hotel.location}</p>
+
+                      <div className="bg-gray-100 p-4 rounded-lg mb-5">
+                        <p className="text-gray-700">{hotel.description}</p>
+                      </div>
                     </div>
 
-                    {/* Price - bottom-right corner */}
-                    <div className="text-right">
-                      <div className="text-3xl md:text-4xl font-bold text-green-700">
-                        {hotel.price.toLocaleString('vi-VN')} ₫
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                      <div className="flex flex-wrap gap-3">
+                        <span className="bg-orange-200 px-3 py-1 rounded text-sm">
+                          Google Map Ratings: {hotel.googleRating}
+                        </span>
+                        <span className="bg-orange-200 px-3 py-1 rounded text-sm">
+                          Pawtopia Ratings: {hotel.pawtopiaRating}
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded text-sm font-medium ${hotel.availability ? 'bg-green-300' : 'bg-red-300'
+                            }`}
+                        >
+                          {hotel.availability ? 'Available' : 'Not Available'}
+                        </span>
+                      </div>
+
+                      {/* Price */}
+                      <div className="text-right">
+                        <div className="text-3xl md:text-4xl font-bold text-green-700">
+                          {hotel.price.toLocaleString('vi-VN')} ₫
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </main>

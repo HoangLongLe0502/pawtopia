@@ -1,162 +1,176 @@
-"use client";
+// pawtopia\src\app\hotels\page.tsx
 
-import { useState } from "react";
-import "./hotels.css";
+import React from 'react';
 
-type Hotel = {
-  id: number;
-  name: string;
-  priceVND: number;
-  location: string;
-  rating: number;
-  available: boolean;
-  short: string;
-  photo?: string;
-};
-
-const sampleHotels: Hotel[] = [
+const mockHotels = [
   {
     id: 1,
-    name: "Cozy Paws Hotel",
-    priceVND: 250000,
-    location: "District 1, HCM",
-    rating: 4.6,
-    available: true,
-    short: "Indoor play area, grooming, 24/7 staff",
-    photo: "/images/hotel1.jpg",
+    name: 'Cozy Cat Inn',
+    location: 'District 1, Ho Chi Minh City',
+    description: 'A luxurious cat hotel with premium amenities and caring staff.',
+    googleRating: 4.5,
+    siteRating: 4.8,
+    availability: true,
+    price: 500000,
+    photo: '/placeholder-hotel.jpg', // Assume a placeholder image
   },
   {
     id: 2,
-    name: "Sunny Whiskers",
-    priceVND: 180000,
-    location: "District 3, HCM",
-    rating: 4.2,
-    available: false,
-    short: "Private suites, vet on call",
-    photo: "/images/hotel2.jpg",
+    name: 'Purrfect Stay Hotel',
+    location: 'District 7, Ho Chi Minh City',
+    description: 'Affordable and comfortable boarding for your feline friends.',
+    googleRating: 4.2,
+    siteRating: 4.5,
+    availability: false,
+    price: 350000,
+    photo: '/placeholder-hotel.jpg',
   },
   {
     id: 3,
-    name: "The Cat Retreat",
-    priceVND: 320000,
-    location: "Thao Dien, HCM",
-    rating: 4.9,
-    available: true,
-    short: "Luxury suites, webcam access",
-    photo: "/images/hotel3.jpg",
+    name: 'Whiskers Resort',
+    location: 'District 3, Ho Chi Minh City',
+    description: 'Spacious rooms and play areas for active cats.',
+    googleRating: 4.7,
+    siteRating: 4.9,
+    availability: true,
+    price: 600000,
+    photo: '/placeholder-hotel.jpg',
   },
 ];
 
 export default function HotelsPage() {
-  const [query, setQuery] = useState("");
-  const [city, setCity] = useState("");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [minRating, setMinRating] = useState(0);
-  const [onlyAvailable, setOnlyAvailable] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  const filtered = sampleHotels.filter((h) => {
-    if (query && !h.name.toLowerCase().includes(query.toLowerCase())) return false;
-    if (city && !h.location.toLowerCase().includes(city.toLowerCase())) return false;
-    if (minPrice && h.priceVND < minPrice) return false;
-    if (maxPrice && maxPrice > 0 && h.priceVND > maxPrice) return false;
-    if (minRating && h.rating < minRating) return false;
-    if (onlyAvailable && !h.available) return false;
-    // Note: start/end date checks would query backend in real app
-    return true;
-  });
-
   return (
-    <div className="hotels-root">
-      <header className="hotels-header">
-        <h1 className="hotels-title">Cat Hotels</h1>
-        <p className="hotels-sub">Find, book and manage cozy stays for your cat</p>
-      </header>
+    <div className="min-h-screen bg-white">
+      {/* Navigation Bar */}
+      <nav className="bg-purple-200 p-4 text-center">
+        <span className="text-lg font-semibold">Pawtopia Navigation Bar</span>
+      </nav>
 
-      <div className="hotels-content">
-        <aside className="hotels-sidebar">
-          <div className="filters vertical">
-            <input
-              className="search"
-              placeholder="Search hotels"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row gap-8 p-8">
+        {/* Left Sidebar: Filters */}
+        <aside className="w-full md:w-1/4 space-y-4">
+          {/* Search Bar */}
+          <input
+            type="text"
+            placeholder="Search hotels..."
+            className="w-full p-2 border border-gray-300 rounded"
+          />
 
-            <select className="city" value={city} onChange={(e) => setCity(e.target.value)}>
-              <option value="">All cities</option>
-              <option value="District 1">District 1</option>
-              <option value="District 3">District 3</option>
-              <option value="Thao Dien">Thao Dien</option>
-            </select>
+          {/* Filter for City */}
+          <select className="w-full p-2 border border-gray-300 rounded">
+            <option>Filter for city</option>
+            <option>Ho Chi Minh City</option>
+            <option>Hanoi</option>
+            {/* Add more options as needed */}
+          </select>
 
-            <input
-              className="price"
-              type="number"
-              placeholder="Min price (VND)"
-              value={minPrice || ""}
-              onChange={(e) => setMinPrice(Number(e.target.value || 0))}
-            />
+          {/* Filter for Ratings */}
+          <select className="w-full p-2 border border-gray-300 rounded">
+            <option>Filter for ratings</option>
+            <option>5 Stars</option>
+            <option>4 Stars</option>
+            <option>3 Stars</option>
+          </select>
 
-            <input
-              className="price"
-              type="number"
-              placeholder="Max price (VND)"
-              value={maxPrice || ""}
-              onChange={(e) => setMaxPrice(Number(e.target.value || 0))}
-            />
+          {/* Minimum Price */}
+          <input
+            type="number"
+            placeholder="Minimum price (in VND)"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
 
-            <select className="rating" value={String(minRating)} onChange={(e) => setMinRating(Number(e.target.value))}>
-              <option value={0}>Any rating</option>
-              <option value={3}>3+</option>
-              <option value={4}>4+</option>
-              <option value={4.5}>4.5+</option>
-            </select>
+          {/* Maximum Price */}
+          <input
+            type="number"
+            placeholder="Maximum price (in VND)"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
 
-            <label className="avail">
-              <input type="checkbox" checked={onlyAvailable} onChange={(e) => setOnlyAvailable(e.target.checked)} /> Available
-            </label>
+          {/* Start Date */}
+          <input
+            type="date"
+            placeholder="Start date"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
 
-            <input className="date" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            <input className="date" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          {/* End Date */}
+          <input
+            type="date"
+            placeholder="End date"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
 
-            <button className="apply">Apply filter</button>
+          {/* Availability Toggle */}
+          <div className="flex items-center">
+            <input type="checkbox" id="availability" className="mr-2" />
+            <label htmlFor="availability">Availability</label>
           </div>
+
+          {/* Apply Filter Button */}
+          <button className="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600">
+            Apply filter
+          </button>
         </aside>
 
-        <div className="hotels-main">
-          <div className="hotels-list">
-            {filtered.map((h) => (
-              <article key={h.id} className="hotel-card">
-                <div className="hotel-photo">
-                  <img src={h.photo ?? "/images/hotel-placeholder.png"} alt={h.name} />
-                </div>
-                <div className="hotel-body">
-                  <div className="hotel-row">
-                    <h2 className="hotel-name">{h.name}</h2>
-                    <div className="hotel-price">{h.priceVND.toLocaleString()} VND</div>
-                  </div>
-                  <div className="hotel-row muted">
-                    <div className="hotel-location">{h.location}</div>
-                    <div className="hotel-rating">⭐ {h.rating.toFixed(1)}</div>
-                  </div>
-                  <p className="hotel-short">{h.short}</p>
-                  <div className="hotel-footer">
-                    <div className={`availability ${h.available ? "in" : "out"}`}>{h.available ? "Available" : "Full"}</div>
-                    <button className="book">Book</button>
-                  </div>
-                </div>
-              </article>
-            ))}
-            {filtered.length === 0 && <p className="no-results">No hotels match your filters.</p>}
-          </div>
+        {/* Right Side: Hotel Cards */}
+        <main className="w-full md:w-3/4 space-y-8">
+          {mockHotels.map((hotel) => (
+            <div
+              key={hotel.id}
+              className="flex flex-col md:flex-row bg-blue-200 p-4 rounded-lg shadow-md"
+            >
+              {/* Photo of Hotel */}
+              <div className="w-full md:w-1/4 bg-yellow-200 flex items-center justify-center">
+                <img
+                  src={hotel.photo}
+                  alt={hotel.name}
+                  className="w-full h-40 object-cover"
+                />
+              </div>
 
-          <aside className="hotels-map">
-            <div className="map-box">Map / Map view placeholder</div>
-          </aside>
-        </div>
+              {/* Hotel Details */}
+              <div className="w-full md:w-3/4 pl-4 space-y-2">
+                {/* Name */}
+                <h2 className="text-xl font-bold">{hotel.name}</h2>
+
+                {/* Location */}
+                <p className="text-gray-600">{hotel.location}</p>
+
+                {/* Short Description */}
+                <div className="bg-gray-200 p-2 rounded">
+                  <p>{hotel.description}</p>
+                </div>
+
+                {/* Bottom Row: Ratings, Availability, Price */}
+                <div className="flex flex-wrap gap-4 mt-2">
+                  {/* Google Map Ratings */}
+                  <div className="bg-orange-200 p-2 rounded text-sm">
+                    Google Map Ratings: {hotel.googleRating}/5
+                  </div>
+
+                  {/* Hotel Ratings (from website) */}
+                  <div className="bg-orange-200 p-2 rounded text-sm">
+                    Hotel Ratings (from my website): {hotel.siteRating}/5
+                  </div>
+
+                  {/* Availability Information */}
+                  <div
+                    className={`p-2 rounded text-sm ${hotel.availability ? 'bg-green-200' : 'bg-red-200'
+                      }`}
+                  >
+                    {hotel.availability ? 'Available' : 'Not Available'}
+                  </div>
+
+                  {/* Price */}
+                  <div className="bg-green-200 p-2 rounded text-sm">
+                    Price: {hotel.price.toLocaleString()} VND
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </main>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 const mockHotels = [
   {
@@ -14,7 +15,7 @@ const mockHotels = [
     siteRating: 4.8,
     availability: true,
     price: 500000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://pix10.agoda.net/hotelImages/34178181/563283680/61e2fd591b52b1c11a049e7f2001250a.jpg?ce=0&s=414x232', // Cat Hotel Ben Thành style, HCMC
   },
   {
     id: 2,
@@ -25,7 +26,7 @@ const mockHotels = [
     siteRating: 4.5,
     availability: false,
     price: 350000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/298448066.jpg?k=3d8f3593f91a2e88130ecc5f75acdadaa77a6d6a62783189f880c09a1f178c14&o=', // Bầu Cat Hotel, HCMC
   },
   {
     id: 3,
@@ -36,7 +37,7 @@ const mockHotels = [
     siteRating: 4.9,
     availability: true,
     price: 600000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://images.squarespace-cdn.com/content/v1/651b1ae5fa3ff4418caec5aa/1696357003701-EPNLPLVJ52OMDZ862VXL/Cat+Boarding+Amenities+-+Cat%27s+Meow+Resort', // Luxury cat boarding room with amenities
   },
   {
     id: 4,
@@ -47,7 +48,7 @@ const mockHotels = [
     siteRating: 4.7,
     availability: true,
     price: 450000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://www.nycampcanine.com/wp-content/uploads/2022/12/cat-boarding-mage-2-600x500-crop.jpg', // Cozy cat boarding interior
   },
   {
     id: 5,
@@ -58,7 +59,7 @@ const mockHotels = [
     siteRating: 4.3,
     availability: false,
     price: 300000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://scratchingpostinn.com/wp-content/uploads/2024/06/Dallas-Fort-Worth-Cat-Boarding-Scratching-Post-Inn-Luxury.jpg', // Luxury with scratching posts
   },
   {
     id: 6,
@@ -69,7 +70,7 @@ const mockHotels = [
     siteRating: 4.9,
     availability: true,
     price: 700000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://cdcssl.ibsrv.net/ibimg/smb/3000x2250_80/webmgr/09/t/f/-min/P1030398-min.jpg.webp?b88bdf69a6cb7a4ca38a405587da2b07', // Upscale cat hotel suite
   },
   {
     id: 7,
@@ -80,7 +81,7 @@ const mockHotels = [
     siteRating: 4.6,
     availability: true,
     price: 400000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://www.rover.com/blog/wp-content/uploads/pet-hotel-in-home-pet-care-cats-boarding.jpg', // Nice cat boarding setup
   },
   {
     id: 8,
@@ -91,7 +92,7 @@ const mockHotels = [
     siteRating: 4.4,
     availability: false,
     price: 320000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://pix10.agoda.net/hotelImages/412145/-1/80ceda91103de739085700f76efc85b3.jpg?ce=0&s=414x232', // Cozy cat hotel room example
   },
   {
     id: 9,
@@ -102,7 +103,7 @@ const mockHotels = [
     siteRating: 5.0,
     availability: true,
     price: 550000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://www.bendkittylodgeoregon.com/images/BKL-Deluxe-Pic-2.jpg', // Deluxe cat room
   },
   {
     id: 10,
@@ -113,7 +114,7 @@ const mockHotels = [
     siteRating: 4.2,
     availability: true,
     price: 380000,
-    photo: '/placeholder-hotel.jpg',
+    photo: 'https://cdcssl.ibsrv.net/ibimg/smb/550x309_80/webmgr/09/t/f/Slider/TINK.jpg.webp?0529b8e8d03f0184e5c3f41463b4811b', // Modern cat boarding
   },
 ];
 
@@ -281,10 +282,12 @@ export default function HotelsPage() {
               className="flex flex-col md:flex-row bg-blue-200 p-4 rounded-lg shadow-md"
             >
               {/* Photo of Hotel */}
-              <div className="w-full md:w-1/4 bg-yellow-200 flex items-center justify-center">
-                <img
+              <div className="w-full md:w-1/4 flex items-center justify-center">
+                <Image
                   src={hotel.photo}
-                  alt={hotel.name}
+                  alt={`${hotel.name} - Cat Hotel Room`}
+                  width={150}
+                  height={150}
                   className="w-full h-40 object-cover"
                 />
               </div>
